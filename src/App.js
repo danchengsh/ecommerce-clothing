@@ -1,22 +1,21 @@
 import React from 'react';
 import './App.css';
-import { Routes, Route, Outlet } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import HomePage from './routes/homepage/homepage.component';
+import NavigationBar from './routes/navigationbar/navigationbar.component';
 
-const navigationBar = () => {
+const Shop = () => {
   return (
-    <div>
-      <div>I am nav bar</div>
-      <Outlet />
-    </div>
-  )
+    <div>I am shop</div>
+  );
 }
 
 const App = () => {
   return (
     <Routes>
-      <Route path='/home' element={navigationBar()}>
+      <Route path='/' element={<NavigationBar />}>
         <Route index element={<HomePage />} />
+        <Route path='shop' element={Shop()} />
       </Route>
     </Routes>
   );
