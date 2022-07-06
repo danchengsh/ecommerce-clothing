@@ -9,8 +9,8 @@ export const BUTTON_TYPE_CLASSES = {
 const getButtonStyle = (buttonType = BUTTON_TYPE_CLASSES.base) => (
     {
         [BUTTON_TYPE_CLASSES.base]: BaseButton,
-        [BUTTON_TYPE_CLASSES.base]: GoogleSignInButton,
-        [BUTTON_TYPE_CLASSES.base]: InvertedButton
+        [BUTTON_TYPE_CLASSES.google]: GoogleSignInButton,
+        [BUTTON_TYPE_CLASSES.inverted]: InvertedButton
     }[buttonType]
 );
 

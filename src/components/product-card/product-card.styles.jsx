@@ -1,13 +1,6 @@
 import styled from 'styled-components';
 import { BaseButton, GoogleSignInButton, InvertedButton } from '../button/button.styles';
 
-export const ProductImage = styled.img`
-  width: 100%;
-  height: 95%;
-  object-fit: cover;
-  margin-bottom: 5px;
-`;
-
 export const Footer = styled.div`
   width: 100%;
   height: 5%;
@@ -33,6 +26,13 @@ export const ProductCardContainer = styled.div`
   align-items: center;
   position: relative;
 
+  img {
+    width: 100%;
+    height: 95%;
+    object-fit: cover;
+    margin-bottom: 5px;
+  }
+
   ${BaseButton}, ${GoogleSignInButton}, ${InvertedButton} {
     width: 80%;
     opacity: 0.7;
@@ -42,7 +42,7 @@ export const ProductCardContainer = styled.div`
   }
 
   &:hover {
-    ${ProductImage} {
+    img {
       opacity: 0.8;
     }
 

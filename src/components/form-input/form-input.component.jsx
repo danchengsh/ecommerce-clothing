@@ -9,7 +9,7 @@ const FormInput = ({ label, inputOptions }) => {
                 <FormInputLabel shrink={inputOptions.value.length}>{label}</FormInputLabel>
             )}
         </Group>
-    )
-}
+    );
+};
 
 export default FormInput;
