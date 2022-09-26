@@ -1,13 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Elements } from '@stripe/react-stripe-js';
 import { BrowserRouter } from 'react-router-dom';
-import './index.css';
 import { UserProvider } from './contexts/user.context';
 import { CategoriesProvider } from './contexts/categories.context';
 import { CartProvider } from './contexts/cart.context';
+import { stripePromise } from './utils/stripe.utils';
 import App from './App';
 // import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
+import './index.css';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -15,7 +17,9 @@ ReactDOM.render(
       <UserProvider>
         <CategoriesProvider>
           <CartProvider>
-            <App />
+            <Elements stripe={stripePromise}>
+              <App />
+            </Elements>
           </CartProvider>
         </CategoriesProvider>
       </UserProvider>
