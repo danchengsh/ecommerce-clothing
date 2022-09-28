@@ -1,16 +1,19 @@
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import { useState } from "react";
 import Button, { BUTTON_TYPE_CLASSES } from "../button/button.component";
-import { PaymentFormContainer, FormContainer } from "./payment-form.styles";
+import { PaymentFormContainer, FormContainer, PaymentButton } from "./payment-form.styles";
 
 const PaymentForm = () => {
     const stripe = useStripe();
     const elements = useElements();
+    const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
     const paymentHandler = async (e) => {
         e.preventDefault();
         if (!stripe || !elements) {
             return;
         }
+        setIsProcessingPayment(true);
 
         const response = await fetch('/.netlify/functions/create-payment-intent', {
             method: 'post',
@@ -29,10 +32,10 @@ const PaymentForm = () => {
                 }
             }
         });
+        setIsProcessingPayment(false);
 
         if (paymentResult.error) alert(paymentResult.error);
         else if (paymentResult.paymentIntent.status === 'succeeded') alert('Payment Successful');
-        
     };
 
     return (
@@ -40,7 +43,7 @@ const PaymentForm = () => {
             <FormContainer>
                 <h2>Credit Card Payment: </h2>
                 <CardElement/>
-                <Button buttonType={BUTTON_TYPE_CLASSES.inverted} onClick={paymentHandler}>Pay now</Button>
+                <PaymentButton isLoading={isProcessingPayment} buttonType={BUTTON_TYPE_CLASSES.inverted} onClick={paymentHandler}>Pay now</PaymentButton>
             </FormContainer>
         </PaymentFormContainer>
     );
