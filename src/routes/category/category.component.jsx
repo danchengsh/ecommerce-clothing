@@ -1,18 +1,42 @@
 import { useContext, useState, useEffect, Fragment } from 'react';
 import { useParams } from 'react-router-dom';
+import { gql, useQuery } from '@apollo/client';
 import { CategoriesContext } from '../../contexts/categories.context';
 import ProductCard from '../../components/product-card/product-card.component';
 
 import { CategoryTitle, CategoryContainer } from './category.styles.jsx';
 
+const GET_CATEGORY = gql`
+    query($title: String!) {
+        getCollectionsByTitle(title: $title) {
+            id
+            title
+            items {
+                id
+                name
+                price
+                imageUrl
+            }
+        }
+    }
+`;
+
 const Category = () => {
     const { category } = useParams();
-    const { categoriesMap } = useContext(CategoriesContext);
+    // const { categoriesMap } = useContext(CategoriesContext);
     const [products, setProducts] = useState(categoriesMap[category]);
+    const { loading, error, data }= useQuery(GET_CATEGORY);
     
     useEffect(() => {
-        setProducts(categoriesMap[category]);
-    }, [category, categoriesMap]);
+        if (data) {
+            const {
+                getCollectionsByTitle: {
+                    items
+                }
+            } = data;
+            setProducts(items);
+        }
+    }, [category, data]);
 
     return (
         <Fragment>

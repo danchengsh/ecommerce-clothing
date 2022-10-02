@@ -1,5 +1,20 @@
 import { createContext, useState, useEffect } from "react";
-import { getCategoriesAndDocuments } from "../utils/firebase/firebase.utils.js";
+import { gql, useQuery } from "@apollo/client";
+
+const COLLECTIONS = gql`
+    query GetCollections {
+        collections {
+            id
+            title
+            items {
+                id
+                name
+                price
+                imageUrl
+            } 
+        }
+    }
+`;
 
 export const CategoriesContext = createContext({
     categoriesMap: {},
@@ -7,15 +22,21 @@ export const CategoriesContext = createContext({
 
 export const CategoriesProvider = ({ children }) => {
     const [categoriesMap, setCategoriesMap] = useState({});
-    const value = { categoriesMap, setCategoriesMap };
+    const { loading, error, data } = useQuery(COLLECTIONS);
 
     useEffect(() => {
-        const getCategoriesMap = async () => {
-            const categories = await getCategoriesAndDocuments();
-            setCategoriesMap(categories);
+        if (data) {
+            const { collections } = data;
+            const collectionsMap = collections.reduce((acc, collection) => {
+                const { title, items } = collection;
+                acc[title.toLowerCase()] = items;
+                return acc;
+            }, {});
+            setCategoriesMap(collectionsMap)
         }
-        getCategoriesMap(); 
-    }, []);
+    }, [data]);
+
+    const value = { categoriesMap, loading };
 
     return <CategoriesContext.Provider value={value}>{children}</CategoriesContext.Provider>
 };
